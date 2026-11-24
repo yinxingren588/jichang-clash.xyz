@@ -19,6 +19,9 @@
   ],
   "author": "机场clash",
   "license": "MIT",
+  "engines": {
+    "node": ">=22.23.4"
+  },
   "dependencies": {
     "@astrojs/tailwind": "^6.0.2",
     "astro": "^7.4.13",
