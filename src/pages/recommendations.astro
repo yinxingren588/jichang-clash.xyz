@@ -1,0 +1,223 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import FeaturedAirportBanner from '../components/FeaturedAirportBanner.astro';
+import AirportCard from '../components/AirportCard.astro';
+import Footer from '../components/Footer.astro';
+import { AIRPORTS } from '../data/airports';
+
+const featuredAirport = AIRPORTS.find(a => a.id === 'invisible') || AIRPORTS[0];
+const otherAirports = AIRPORTS.filter(a => a.id !== featuredAirport.id);
+---
+
+<Layout
+  title="🔥 热门机场推荐 (2026最新) - 35款高速稳定Clash节点购买测评榜单 | 机场clash"
+  description="精选2026年35家优质高速稳定机场推荐榜单，核心主推隐形人旗舰IPLC专线，覆盖BGP高速中继、4K/8K流媒体解锁与按量套餐，支持实时搜索与分类筛选。"
+  keywords="热门机场推荐, 2026机场推荐榜单, Clash节点购买, 高速稳定机场, IPLC专线机场, 便宜机场推荐, 翻墙梯子, 机场测评, 隐形人机场, 机场优惠码"
+  canonicalURL="https://jichang-clash.xyz/recommendations"
+>
+  <Header slot="header" />
+
+  <div class="py-8 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto">
+    <!-- Breadcrumb -->
+    <div class="flex items-center space-x-2 text-xs text-slate-500 mb-6 font-mono">
+      <a href="/" class="hover:text-indigo-600">首页</a>
+      <span>/</span>
+      <span class="text-indigo-600 font-semibold">热门机场推荐</span>
+    </div>
+
+    <!-- Header Banner -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 pb-6 border-b border-slate-200">
+      <div>
+        <div class="inline-flex items-center space-x-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 mb-2 font-mono">
+          <span>RECOMMENDED AIRPORTS (共 {AIRPORTS.length} 家精选)</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          2026 热门高速稳定机场推荐榜单
+        </h1>
+        <p class="text-sm sm:text-base text-slate-600 mt-2">
+          涵盖全专线 IPLC、高性价比 BGP 隧道、大流量流媒体追剧及外服电竞加速，支持实时关键词搜索与分类筛选
+        </p>
+      </div>
+
+      <!-- Quick Tips -->
+      <div class="text-xs text-slate-600 bg-slate-100 border border-slate-200 px-3.5 py-2.5 rounded-xl flex items-center space-x-2 flex-shrink-0">
+        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <span>提示：点击优惠码可一键复制，官网结算立享折扣</span>
+      </div>
+    </div>
+
+    <!-- Search & Filter Bar -->
+    <div class="mb-8 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+      <!-- Search Input -->
+      <div class="relative w-full sm:w-80">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        </div>
+        <input
+          type="text"
+          id="airport-search"
+          placeholder="搜索机场 (如: 隐形人、飞猫云、微风)..."
+          class="w-full pl-9 pr-4 py-2 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-slate-800 placeholder-slate-400 bg-slate-50 transition-all"
+        />
+      </div>
+
+      <!-- Filter Pills -->
+      <div class="flex items-center space-x-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 text-xs font-medium">
+        <button data-filter="all" class="filter-btn active whitespace-nowrap px-3.5 py-2 rounded-xl bg-indigo-600 text-white font-semibold shadow-xs transition-all">
+          全部 ({AIRPORTS.length})
+        </button>
+        <button data-filter="iplc" class="filter-btn whitespace-nowrap px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">
+          IPLC 专线
+        </button>
+        <button data-filter="cost-effective" class="filter-btn whitespace-nowrap px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">
+          高性价比
+        </button>
+        <button data-filter="streaming" class="filter-btn whitespace-nowrap px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">
+          流媒体大流量
+        </button>
+        <button data-filter="monthly" class="filter-btn whitespace-nowrap px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">
+          月付尝鲜
+        </button>
+        <button data-filter="onetime" class="filter-btn whitespace-nowrap px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">
+          不限时按量
+        </button>
+        <button data-filter="dual-isp" class="filter-btn whitespace-nowrap px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">
+          原生双ISP
+        </button>
+        <button data-filter="gaming" class="filter-btn whitespace-nowrap px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">
+          游戏电竞
+        </button>
+      </div>
+    </div>
+
+    <!-- 1. First Row: Invisible (隐形人) Full-Width Banner -->
+    <FeaturedAirportBanner airport={featuredAirport} />
+
+    <!-- 2. Subsequent Rows: 5 Cards Per Row on Desktop -->
+    <div class="mb-4 flex items-center justify-between">
+      <h2 class="text-xl font-bold text-slate-900 flex items-center space-x-2">
+        <span class="w-2 h-5 bg-indigo-600 rounded-full inline-block"></span>
+        <span>更多精选高速稳定机场推荐</span>
+      </h2>
+      <span class="text-xs text-slate-500 font-mono">共 {otherAirports.length} 款推荐服务商</span>
+    </div>
+
+    <div id="airport-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+      {otherAirports.map((airport, index) => (
+        <AirportCard airport={airport} index={index + 1} />
+      ))}
+    </div>
+
+    <!-- No results message -->
+    <div id="no-results" class="hidden text-center py-16 text-slate-500 text-sm">
+      <svg class="w-12 h-12 mx-auto text-slate-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      没有找到匹配的机场，请尝试更换关键词搜索。
+    </div>
+
+    <!-- Buyer's Guide Notes -->
+    <div class="mt-16 p-6 sm:p-8 rounded-3xl bg-slate-50 border border-slate-200">
+      <h3 class="text-lg font-bold text-slate-900 mb-3 flex items-center space-x-2">
+        <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <span>新手选购实用避坑指南</span>
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs sm:text-sm text-slate-600 mt-4">
+        <div class="bg-white p-4 rounded-2xl border border-slate-200">
+          <strong class="text-slate-900 block mb-1">1. 重度稳定与外贸办公首选 IPLC 专线</strong>
+          IPLC 内网专线数据不过 GFW 敏感期抗封锁能力强，延迟低、丢包少，推荐选择「隐形人」或「微风网络」。
+        </div>
+        <div class="bg-white p-4 rounded-2xl border border-slate-200">
+          <strong class="text-slate-900 block mb-1">2. 追求高性价比与学生党首选 BGP 隧道</strong>
+          BGP 隧道中转在非极端敏感时期速度飞快，月付仅需十元左右即可获得数百 GB 流量，推荐「暮光加速」或「快狸」。
+        </div>
+        <div class="bg-white p-4 rounded-2xl border border-slate-200">
+          <strong class="text-slate-900 block mb-1">3. 新用户初次尝试建议先月付体验</strong>
+          首次购买任何服务商均建议先开通「月付」或「测试套餐」，体验晚高峰速度稳定满意后，再考虑季度付或年付。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <Footer slot="footer" />
+
+  <!-- Client-side filter script -->
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchInput = document.getElementById('airport-search');
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      const banner = document.querySelector('[data-featured-banner="true"]');
+      const gridCards = document.querySelectorAll('#airport-grid > [data-airport-card]');
+      const noResults = document.getElementById('no-results');
+
+      let currentCategory = 'all';
+      let currentQuery = '';
+
+      function applyFilter() {
+        let visibleCount = 0;
+
+        // 1. 隐形人 (FeaturedAirportBanner) 无论切换什么关键词，始终置顶展示！
+        if (banner) {
+          banner.style.display = 'block';
+        }
+
+        // 2. 针对普通网格卡片进行分类筛选
+        const visibleCards = [];
+        gridCards.forEach(card => {
+          const name = card.getAttribute('data-name') || '';
+          const slogan = card.getAttribute('data-slogan') || '';
+          const categories = (card.getAttribute('data-categories') || '').split(' ');
+
+          const matchesQuery = !currentQuery || name.includes(currentQuery) || slogan.includes(currentQuery);
+          const matchesCategory = currentCategory === 'all' || categories.includes(currentCategory);
+
+          if (matchesQuery && matchesCategory) {
+            card.style.display = 'flex';
+            visibleCards.push(card);
+            visibleCount++;
+          } else {
+            card.style.display = 'none';
+          }
+        });
+
+        // 3. 排序策略：
+        // 全部 (all)：严格保持原有默认顺序不打乱！
+        if (currentCategory === 'all') {
+          gridCards.forEach(card => {
+            card.style.order = card.getAttribute('data-original-index') || '0';
+          });
+        } else {
+          // 其他具体分类关键词（如 iplc、高性价比、流媒体大流量等）：随机打乱排序！
+          const shuffledOrders = visibleCards.map((_, i) => i).sort(() => Math.random() - 0.5);
+          visibleCards.forEach((card, idx) => {
+            card.style.order = String(shuffledOrders[idx]);
+          });
+        }
+
+        if (noResults) {
+          noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+      }
+
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          currentQuery = e.target.value.trim().toLowerCase();
+          applyFilter();
+        });
+      }
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach(b => {
+            b.classList.remove('bg-indigo-600', 'text-white', 'font-semibold', 'shadow-xs');
+            b.classList.add('bg-slate-100', 'text-slate-700');
+          });
+          btn.classList.remove('bg-slate-100', 'text-slate-700');
+          btn.classList.add('bg-indigo-600', 'text-white', 'font-semibold', 'shadow-xs');
+
+          currentCategory = btn.getAttribute('data-filter') || 'all';
+          applyFilter();
+        });
+      });
+    });
+  </script>
+</Layout>

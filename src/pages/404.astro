@@ -1,0 +1,64 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout
+  title="404 - 页面未找到 | 机场clash"
+  description="抱歉，您访问的页面不存在或已被移除。请返回首页或查看热门机场推荐与常见问题知识库。"
+  canonicalURL="https://jichang-clash.xyz/404"
+>
+  <Header slot="header" />
+
+  <main class="min-h-[70vh] flex items-center justify-center py-16 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full text-center">
+      <!-- 404 Icon Badge -->
+      <div class="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-indigo-50 border border-indigo-200 text-indigo-600 font-extrabold text-3xl font-mono mb-6 shadow-sm">
+        404
+      </div>
+
+      <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight mb-3">
+        抱歉，该页面已飞往外太空
+      </h1>
+      <p class="text-sm text-slate-600 mb-8 leading-relaxed">
+        您所请求的链接可能已被移动、删除，或输入的网址有误。您可以尝试通过下方快捷入口继续浏览：
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
+        <a
+          href="/"
+          class="flex items-center justify-center space-x-2 py-3 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm shadow-md shadow-indigo-600/20 transition-all active:scale-95"
+        >
+          <span>🏠 返回网站首页</span>
+        </a>
+        <a
+          href="/recommendations"
+          class="flex items-center justify-center space-x-2 py-3 px-4 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-sm border border-slate-200 shadow-xs transition-all active:scale-95"
+        >
+          <span>🔥 热门机场推荐</span>
+        </a>
+        <a
+          href="/faq"
+          class="flex items-center justify-center space-x-2 py-3 px-4 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-sm border border-slate-200 shadow-xs transition-all active:scale-95"
+        >
+          <span>💡 常见排错知识库</span>
+        </a>
+        <a
+          href="/comparison"
+          class="flex items-center justify-center space-x-2 py-3 px-4 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-sm border border-slate-200 shadow-xs transition-all active:scale-95"
+        >
+          <span>📊 机场横向对比表</span>
+        </a>
+      </div>
+
+      <div class="pt-6 border-t border-slate-200 text-xs text-slate-500 font-mono">
+        <span>HOST: jichang-clash.xyz</span>
+        <span class="mx-2">•</span>
+        <span>STATUS: 404_NOT_FOUND</span>
+      </div>
+    </div>
+  </main>
+
+  <Footer slot="footer" />
+</Layout>

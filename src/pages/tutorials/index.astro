@@ -1,0 +1,164 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { CLASH_CLIENTS } from '../../data/airports';
+---
+
+<Layout
+  title="📖 Clash 全平台配置教程与主流客户端下载中心 (2026最新) | 机场clash"
+  description="详细汇总 Windows、Mac、Android、iOS 及软路由等全平台主流代理软件下载与订阅导入图文教程，包含 Clash Verge Rev、Mihomo Party、小火箭使用指南。"
+  keywords="Clash配置教程, Clash客户端下载, Clash Verge Rev, Mihomo Party, Shadowrocket小火箭, Clash订阅导入, 翻墙教程, 科学上网教程, 软路由翻墙"
+  canonicalURL="https://jichang-clash.xyz/tutorials"
+>
+  <Header slot="header" />
+
+  <div class="py-8 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto">
+    <!-- Breadcrumb -->
+    <div class="flex items-center space-x-2 text-xs text-slate-500 mb-6 font-mono">
+      <a href="/" class="hover:text-indigo-600">首页</a>
+      <span>/</span>
+      <span class="text-indigo-600 font-semibold">Clash 教程中心</span>
+    </div>
+
+    <!-- Header Banner -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 pb-6 border-b border-slate-200">
+      <div>
+        <div class="inline-flex items-center space-x-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 mb-2 font-mono">
+          <span>TUTORIALS & CLIENTS</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          Clash 全平台新手配置教程与客户端下载
+        </h1>
+        <p class="text-sm sm:text-base text-slate-600 mt-2">
+          不论您使用的是 Windows、Mac 还是 Android、iOS 手机，只需 3 步即可轻松配置高速稳定的科学上网环境
+        </p>
+      </div>
+
+      <!-- Quick Action -->
+      <a
+        href="/recommendations"
+        class="inline-flex items-center space-x-1.5 px-4 py-2.5 rounded-xl bg-indigo-600 text-white hover:bg-indigo-500 text-xs sm:text-sm font-semibold transition-all flex-shrink-0 shadow-md"
+      >
+        <span>前往挑选机场套餐</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+      </a>
+    </div>
+
+    <!-- 3 Steps Visual Guide -->
+    <div class="mb-14">
+      <h2 class="text-xl font-bold text-slate-900 mb-6 flex items-center space-x-2">
+        <span class="w-2 h-5 bg-indigo-600 rounded-full inline-block"></span>
+        <span>新手 3 步极速上手指南</span>
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm relative">
+          <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-700 border border-indigo-200 font-black flex items-center justify-center text-xl mb-4">
+            1
+          </div>
+          <h3 class="text-lg font-bold text-slate-900 mb-2">选购套餐复制订阅</h3>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            在 <a href="/recommendations" class="text-indigo-600 underline font-semibold">推荐机场榜单</a> 中挑选适合的机场服务，注册登录后进入「用户中心」，点击「复制 Clash 订阅链接」或「一键导入」。
+          </p>
+        </div>
+
+        <div class="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm relative">
+          <div class="w-12 h-12 rounded-2xl bg-cyan-50 text-cyan-700 border border-cyan-200 font-black flex items-center justify-center text-xl mb-4">
+            2
+          </div>
+          <h3 class="text-lg font-bold text-slate-900 mb-2">下载并安装客户端</h3>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            根据您的设备平台下载客户端（电脑推荐使用 Clash Verge Rev，安卓使用 Clash for Android，iOS 使用小火箭）。
+          </p>
+        </div>
+
+        <div class="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm relative">
+          <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-700 border border-purple-200 font-black flex items-center justify-center text-xl mb-4">
+            3
+          </div>
+          <h3 class="text-lg font-bold text-slate-900 mb-2">粘贴配置开启代理</h3>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            打开客户端配置页面粘贴订阅 URL，下载节点成功后，切换为「规则模式 (Rule)」并勾选「系统代理 (System Proxy)」即可开始高速翻墙。
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Client Download Cards Grid -->
+    <div class="mb-14">
+      <h2 class="text-xl font-bold text-slate-900 mb-6 flex items-center space-x-2">
+        <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        <span>主流代理客户端下载与特性介绍</span>
+      </h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {CLASH_CLIENTS.map(client => (
+          <div class="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm hover:border-indigo-400 hover:shadow-md transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-lg font-bold text-slate-900">
+                  {client.name}
+                </span>
+                <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                  {client.tag}
+                </span>
+              </div>
+              <div class="text-xs font-mono text-indigo-600 mb-3 font-semibold">{client.platform}</div>
+              <p class="text-sm text-slate-600 leading-relaxed mb-4">{client.desc}</p>
+            </div>
+            <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+              <a
+                href={client.link}
+                class="inline-flex items-center space-x-1.5 text-xs sm:text-sm font-bold text-indigo-600 hover:text-indigo-700 transition-colors"
+              >
+                <span>阅读详细安装教程</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Troubleshooting Guide -->
+    <div class="p-6 sm:p-8 rounded-3xl bg-slate-50 border border-slate-200">
+      <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center space-x-2">
+        <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+        <span>新手常见连接故障快速排查表</span>
+      </h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-slate-600">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200">
+          <strong class="text-slate-900 block mb-1">Q1：导入订阅时报错 Network Error 或 Download Timeout？</strong>
+          <p class="leading-relaxed">
+            大部分原因为机场的订阅转换域名被本地运营商临时拦截。解决办法：开启现有节点代理后再点导入，或在浏览器中打开订阅链接确认是否能正常下载配置文件文本。
+          </p>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200">
+          <strong class="text-slate-900 block mb-1">Q2：开启代理后无法访问 Google，但国内网页正常？</strong>
+          <p class="leading-relaxed">
+            检查客户端左侧「代理」页面是否选择了可用的绿色延迟节点；检查右上角「系统代理 (System Proxy)」是否已打勾开启；若使用了安全软件（如 360 等），可能拦截了 7890 端口代理权限。
+          </p>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200">
+          <strong class="text-slate-900 block mb-1">Q3：连上代理后，微信/淘宝等国内应用变慢或显示海外 IP？</strong>
+          <p class="leading-relaxed">
+            请确认客户端顶部的代理模式是否被误设为了「全局 (Global)」。必须选择「规则 (Rule)」模式，这样国内流量直连直通，只有海外流量才走代理节点。
+          </p>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200">
+          <strong class="text-slate-900 block mb-1">Q4：节点测速全部显示红色的 Timeout 超时？</strong>
+          <p class="leading-relaxed">
+            通常是因为电脑系统时间与国际标准时间不一致（Clash 加密握手要求时间误差在 60 秒以内）。请在 Windows 设置中点击「立即同步时间」即可恢复正常。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <Footer slot="footer" />
+</Layout>

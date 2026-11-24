@@ -1,0 +1,84 @@
+---
+import { CLASH_CLIENTS } from '../data/airports';
+---
+
+<section id="tutorials" class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+  <div class="text-center mb-12">
+    <div class="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 mb-3 font-mono">
+      GETTING STARTED
+    </div>
+    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+      新手 3 步快速配置 Clash 上网指南
+    </h2>
+    <p class="text-sm sm:text-base text-slate-600 mt-2 max-w-xl mx-auto">
+      不论是 Windows、Mac 还是安卓、iOS，只需三步即可畅享高速全球互联
+    </p>
+  </div>
+
+  <!-- 3 Steps -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-14">
+    <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm relative">
+      <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-700 border border-indigo-200 font-bold flex items-center justify-center text-lg mb-4">
+        1
+      </div>
+      <h3 class="text-lg font-bold text-slate-900 mb-2">选购套餐复制订阅</h3>
+      <p class="text-sm text-slate-600 leading-relaxed">
+        在上方推荐列表中挑选适合的机场服务，注册登录后进入「用户中心」，点击「复制 Clash 订阅链接」或「一键导入」。
+      </p>
+    </div>
+
+    <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm relative">
+      <div class="w-10 h-10 rounded-xl bg-cyan-50 text-cyan-700 border border-cyan-200 font-bold flex items-center justify-center text-lg mb-4">
+        2
+      </div>
+      <h3 class="text-lg font-bold text-slate-900 mb-2">下载并安装客户端</h3>
+      <p class="text-sm text-slate-600 leading-relaxed">
+        根据您的设备平台下载客户端（电脑推荐使用 Clash Verge Rev，安卓使用 Clash for Android，iOS 使用小火箭）。
+      </p>
+    </div>
+
+    <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm relative">
+      <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-700 border border-purple-200 font-bold flex items-center justify-center text-lg mb-4">
+        3
+      </div>
+      <h3 class="text-lg font-bold text-slate-900 mb-2">粘贴配置开启代理</h3>
+      <p class="text-sm text-slate-600 leading-relaxed">
+        打开客户端配置页面粘贴订阅 URL，下载节点成功后，切换为「规则模式 (Rule)」并勾选「系统代理 (System Proxy)」即可开始翻墙。
+      </p>
+    </div>
+  </div>
+
+  <!-- Client Grid -->
+  <div>
+    <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center space-x-2">
+      <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+      <span>全平台 Clash 主流客户端下载推荐</span>
+    </h3>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {CLASH_CLIENTS.map(client => (
+        <a
+          href={client.link}
+          class="p-5 rounded-xl bg-white border border-slate-200 shadow-sm hover:border-indigo-400 hover:shadow-md transition-all flex flex-col justify-between group"
+        >
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-base font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
+                {client.name}
+              </span>
+              <span class="text-[11px] font-medium px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
+                {client.tag}
+              </span>
+            </div>
+            <div class="text-xs font-mono text-indigo-600 mb-2 font-medium">{client.platform}</div>
+            <p class="text-xs text-slate-600 leading-relaxed">{client.desc}</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-indigo-600 font-semibold">
+            <span>查看详细教程与下载</span>
+            <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

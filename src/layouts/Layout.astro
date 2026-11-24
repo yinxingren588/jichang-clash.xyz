@@ -1,0 +1,107 @@
+---
+import '../styles/global.css';
+import FloatingQuickBar from '../components/FloatingQuickBar.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  keywords?: string;
+  canonicalURL?: string;
+}
+
+const {
+  title = "机场clash - 2026 高速稳定机场推荐 | Clash全平台节点购买与测评指南",
+  description = "机场clash (jichang-clash.xyz) 提供2026年最新高速稳定机场推荐、IPLC内网专线节点评测、Clash Verge / Mihomo 全平台配置教程与专属折扣码，助力流畅访问 YouTube 4K、ChatGPT 与海外流媒体。",
+  keywords = "机场推荐, Clash机场, 机场clash, 2026机场推荐, IPLC专线, Clash配置教程, 翻墙机场, 梯子推荐, jichang-clash.xyz",
+  canonicalURL = "https://jichang-clash.xyz"
+} = Astro.props;
+
+const siteUrl = "https://jichang-clash.xyz";
+---
+
+<!doctype html>
+<html lang="zh-CN" class="light scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/logo.png" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:site_name" content="机场clash" />
+    <meta property="og:image" content={`${siteUrl}/logo.png`} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={`${siteUrl}/logo.png`} />
+
+    <!-- JSON-LD Structured Data for SEO -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "机场clash",
+      "url": siteUrl,
+      "description": description,
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": `${siteUrl}/?q={search_term_string}`,
+        "query-input": "required name=search_term_string"
+      }
+    })} />
+  </head>
+  <body class="min-h-screen bg-white text-slate-800 flex flex-col selection:bg-indigo-500 selection:text-white">
+    <!-- Light subtle ambient pastel background accents -->
+    <div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
+      <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[380px] bg-indigo-100/70 blur-[130px] rounded-full"></div>
+      <div class="absolute top-[35%] -left-32 w-[500px] h-[350px] bg-sky-100/60 blur-[120px] rounded-full"></div>
+      <div class="absolute top-[65%] -right-32 w-[500px] h-[400px] bg-purple-100/50 blur-[140px] rounded-full"></div>
+    </div>
+
+    <slot name="header" />
+    <main class="flex-grow">
+      <slot />
+    </main>
+    <slot name="footer" />
+
+    <!-- 可移动右侧快捷栏 (含 Clash 独家合作机场与快捷导航) -->
+    <FloatingQuickBar />
+
+    <!-- Toast message for coupon copy -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-slate-900 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center space-x-2 text-sm font-medium">
+      <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+      <span id="toast-msg">优惠码已复制到剪贴板！</span>
+    </div>
+
+    <script is:inline>
+      window.copyCoupon = function(code, e) {
+        if (e) e.stopPropagation();
+        navigator.clipboard.writeText(code).then(() => {
+          const toast = document.getElementById('toast');
+          const toastMsg = document.getElementById('toast-msg');
+          if (toast && toastMsg) {
+            toastMsg.innerText = `优惠码 [${code}] 已复制到剪切板！`;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            setTimeout(() => {
+              toast.classList.add('translate-y-20', 'opacity-0');
+              toast.classList.remove('translate-y-0', 'opacity-100');
+            }, 2500);
+          }
+        }).catch(err => {
+          alert('复制失败，请手动长按复制: ' + code);
+        });
+      };
+    </script>
+  </body>
+</html>

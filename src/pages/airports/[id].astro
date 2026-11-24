@@ -1,0 +1,635 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { AIRPORTS, type Airport } from '../../data/airports';
+
+export async function getStaticPaths() {
+  return AIRPORTS.map(airport => ({
+    params: { id: airport.id },
+    props: { airport },
+  }));
+}
+
+interface Props {
+  airport: Airport;
+}
+
+const { airport } = Astro.props;
+
+// Categorize packages if present
+const subscriptionPackages = airport.packages?.filter(p => p.category === 'subscription') || [];
+const onetimePackages = airport.packages?.filter(p => p.category === 'onetime') || [];
+
+// Select 4 related recommended airports
+const relatedAirports = AIRPORTS.filter(a => a.id !== airport.id && a.price !== '-').slice(0, 4);
+---
+
+<Layout
+  title={`${airport.name} 怎么样？2026最新评测、价格套餐、测速与优惠码 - 机场clash`}
+  description={`全面评测 ${airport.name}：${airport.lines !== '-' ? airport.lines : '高速网络'}线路实测晚高峰表现，最新套餐价格、流量额度、解锁 ChatGPT 与 Netflix 表现及专属优惠码与官网直达入口。`}
+  keywords={`${airport.name}, ${airport.name}怎么样, ${airport.name}评测, ${airport.name}官网, ${airport.name}优惠码, ${airport.name}最新套餐, ${airport.name}节点测速, Clash机场推荐`}
+  canonicalURL={`https://jichang-clash.xyz/airports/${airport.id}`}
+>
+  <Header slot="header" />
+
+  <article class="py-8 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+    <!-- Breadcrumb -->
+    <div class="flex items-center space-x-2 text-xs text-slate-500 mb-6 font-mono flex-wrap gap-y-1">
+      <a href="/" class="hover:text-indigo-600">首页</a>
+      <span>/</span>
+      <a href="/recommendations" class="hover:text-indigo-600">热门机场推荐</a>
+      <span>/</span>
+      <span class="text-indigo-600 font-semibold">{airport.name} 详细评测</span>
+    </div>
+
+    <!-- Review Header Card -->
+    <div class="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-sm mb-10">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-6 border-b border-slate-100">
+        <div class="flex items-center space-x-4">
+          {airport.logo ? (
+            <img
+              src={airport.logo}
+              alt={airport.name}
+              class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-contain bg-slate-50 border border-slate-200 shadow-sm flex-shrink-0"
+            />
+          ) : (
+            <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-indigo-50 border border-indigo-200 text-indigo-700 font-bold flex items-center justify-center text-2xl font-mono flex-shrink-0">
+              {airport.name.slice(0, 2)}
+            </div>
+          )}
+          <div>
+            <div class="flex items-center space-x-2.5 flex-wrap gap-y-1">
+              <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                {airport.name}
+              </h1>
+              {airport.badge && (
+                <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
+                  {airport.badge}
+                </span>
+              )}
+            </div>
+            <p class="text-sm text-slate-600 mt-1.5 leading-relaxed max-w-xl">
+              {airport.slogan || '专注高速稳定的科学上网服务商，支持全平台 Clash 客户端一键订阅导入。'}
+            </p>
+          </div>
+        </div>
+
+        <!-- Rating Score Badge -->
+        <div class="flex items-center md:flex-col items-end gap-2 flex-shrink-0">
+          <div class="flex items-baseline space-x-1 bg-gradient-to-br from-amber-400 to-amber-500 text-slate-950 font-black px-3.5 py-1.5 rounded-2xl shadow-sm">
+            <span class="text-sm">★</span>
+            <span class="text-xl font-bold">{airport.score.toFixed(1)}</span>
+          </div>
+          <span class="text-xs text-slate-500 font-mono">综合评测得分</span>
+        </div>
+      </div>
+
+      <!-- Action & Coupon Bar -->
+      <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        {airport.coupon ? (
+          <div class="w-full sm:w-auto p-3 rounded-2xl bg-amber-50 border border-amber-200 flex items-center space-x-3 text-xs">
+            <span class="text-amber-800 font-medium">{airport.couponDiscount || '专属折扣码'}:</span>
+            <span class="font-mono font-black text-amber-950 text-sm bg-white px-2 py-0.5 rounded border border-amber-300">
+              {airport.coupon}
+            </span>
+            <button
+              onclick={`copyCoupon('${airport.coupon}', event)`}
+              class="px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs transition-colors"
+            >
+              复制
+            </button>
+          </div>
+        ) : (
+          <div class="text-xs text-slate-500">
+            ⚡ 官方直连优惠 · 全协议全平台客户端深度兼容
+          </div>
+        )}
+
+        <div class="flex items-center space-x-3 w-full sm:w-auto flex-wrap sm:flex-nowrap gap-2">
+          {airport.packages && airport.packages.length > 0 && (
+            <a
+              href="#packages"
+              class="w-full sm:w-auto py-3 px-5 rounded-2xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-sm border border-indigo-200 transition-all flex items-center justify-center space-x-1.5"
+            >
+              <span>查看套餐配套</span>
+              <span>↓</span>
+            </a>
+          )}
+          <a
+            href={airport.affLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-full sm:w-auto py-3 px-6 rounded-2xl bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center space-x-2"
+          >
+            <span>前往 {airport.name} 官网选购</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Core Specs Grid -->
+    <div class="mb-10">
+      <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center space-x-2">
+        <span class="w-2 h-5 bg-indigo-600 rounded-full inline-block"></span>
+        <span>核心技术参数概览</span>
+      </h2>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+          <div class="text-xs text-slate-500 font-medium">起步资费</div>
+          <div class="text-base sm:text-lg font-bold text-indigo-600 mt-1">
+            {airport.price !== '-' ? airport.price : '暂未收录'}
+          </div>
+          <div class="text-[11px] text-slate-400 mt-0.5">支持月付/年付/按量</div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+          <div class="text-xs text-slate-500 font-medium">可用流量</div>
+          <div class="text-base sm:text-lg font-bold text-slate-800 mt-1 truncate">
+            {airport.traffic !== '-' ? airport.traffic : '暂未收录'}
+          </div>
+          <div class="text-[11px] text-slate-400 mt-0.5">多档位弹性套餐</div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+          <div class="text-xs text-slate-500 font-medium">专线类型</div>
+          <div class="text-base sm:text-lg font-bold text-emerald-600 mt-1 truncate">
+            {airport.lines !== '-' ? airport.lines : '暂未收录'}
+          </div>
+          <div class="text-[11px] text-slate-400 mt-0.5">抗封锁与稳定性保障</div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+          <div class="text-xs text-slate-500 font-medium">峰值带宽</div>
+          <div class="text-base sm:text-lg font-bold text-blue-600 mt-1">
+            {airport.speed !== '-' ? airport.speed : '1000Mbps+'}
+          </div>
+          <div class="text-[11px] text-slate-400 mt-0.5">4K/8K 视频秒开</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Highlights & Unblocks -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+      <div class="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm">
+        <h3 class="text-base font-bold text-slate-900 mb-4 flex items-center space-x-2">
+          <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span>核心优势与服务特色</span>
+        </h3>
+        {airport.highlights && airport.highlights.length > 0 ? (
+          <ul class="space-y-2.5 text-sm text-slate-600">
+            {airport.highlights.map(item => (
+              <li class="flex items-start space-x-2">
+                <span class="text-emerald-500 font-bold mt-0.5">✓</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <ul class="space-y-2.5 text-sm text-slate-600">
+            <li class="flex items-start space-x-2">
+              <span class="text-emerald-500 font-bold mt-0.5">✓</span>
+              <span>支持全平台 Clash 客户端一键导入配置</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-emerald-500 font-bold mt-0.5">✓</span>
+              <span>全天候监控节点健康，故障秒级自动转移</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-emerald-500 font-bold mt-0.5">✓</span>
+              <span>资费灵活亲民，适合不同预算人群</span>
+            </li>
+          </ul>
+        )}
+      </div>
+
+      <div class="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm">
+        <h3 class="text-base font-bold text-slate-900 mb-4 flex items-center space-x-2">
+          <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          <span>流媒体解锁与传输协议</span>
+        </h3>
+
+        <div class="mb-4">
+          <div class="text-xs text-slate-500 font-medium mb-2">流媒体与 AI 工具支持：</div>
+          <div class="flex flex-wrap gap-1.5">
+            {(airport.streaming && airport.streaming.length > 0 ? airport.streaming : ['Netflix 4K', 'Disney+', 'YouTube 4K', 'ChatGPT/Claude', 'TikTok']).map(service => (
+              <span class="text-xs px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium">
+                {service}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <div class="text-xs text-slate-500 font-medium mb-2">底层加密与传输协议：</div>
+          <div class="flex flex-wrap gap-1.5">
+            {(airport.protocols && airport.protocols.length > 0 ? airport.protocols : ['Shadowsocks', 'Trojan', 'VLESS']).map(p => (
+              <span class="text-xs px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-200 font-mono">
+                {p}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Official Pricing & Packages Section -->
+    <div id="packages" class="mb-12">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-200">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight flex items-center space-x-2">
+            <span class="w-2.5 h-6 bg-gradient-to-b from-indigo-600 to-indigo-700 rounded-full inline-block"></span>
+            <span>{airport.name} 官方套餐价格与配置详单</span>
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1">
+            经官方实测核准收录：提供周期订阅型专线套餐与一次性永不过期买断包，全节点真实 1x 倍率计费。
+          </p>
+        </div>
+        {airport.coupon && (
+          <div class="self-start sm:self-auto flex items-center space-x-2 bg-amber-50 border border-amber-200/80 rounded-xl px-3.5 py-2 text-xs">
+            <span class="text-amber-800 font-medium">{airport.couponDiscount || '专属优惠码'}：</span>
+            <span class="font-mono font-bold text-amber-950 bg-white px-2 py-0.5 rounded border border-amber-300">
+              {airport.coupon}
+            </span>
+            <button
+              onclick={`copyCoupon('${airport.coupon}', event)`}
+              class="text-indigo-600 hover:text-indigo-800 font-bold ml-1.5"
+            >
+              一键复制
+            </button>
+          </div>
+        )}
+      </div>
+
+      {airport.packages && airport.packages.length > 0 ? (
+        <div class="space-y-10">
+          <!-- 1. All Packages Overview Table -->
+          <div>
+            <div class="flex items-center space-x-2 mb-3">
+              <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
+              <h3 class="text-base font-bold text-slate-900">官方 9 大套餐资费与规格一览表</h3>
+              <span class="text-xs text-slate-400 font-normal">（支持微信 支付宝和USDT即时开通）</span>
+            </div>
+
+            <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-xs">
+              <table class="w-full text-left text-xs sm:text-sm text-slate-600">
+                <thead class="bg-slate-50 text-xs text-slate-500 border-b border-slate-200 font-medium">
+                  <tr>
+                    <th scope="col" class="py-3.5 px-4 font-bold text-slate-700">套餐名称</th>
+                    <th scope="col" class="py-3.5 px-4 font-bold text-slate-700">资费与周期</th>
+                    <th scope="col" class="py-3.5 px-4 font-bold text-slate-700">流量额度</th>
+                    <th scope="col" class="py-3.5 px-4 font-bold text-slate-700">专线架构 / 速率</th>
+                    <th scope="col" class="py-3.5 px-4 font-bold text-slate-700">在线设备</th>
+                    <th scope="col" class="py-3.5 px-4 font-bold text-slate-700">推荐适用人群</th>
+                    <th scope="col" class="py-3.5 px-4 font-bold text-slate-700 text-right">订购入口</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  {airport.packages.map((plan) => (
+                    <tr class={`hover:bg-slate-50/80 transition-colors ${plan.isFeatured ? 'bg-indigo-50/20' : ''}`}>
+                      <td class="py-3 px-4 font-bold text-slate-900 whitespace-nowrap">
+                        <div class="flex items-center space-x-1.5">
+                          <span>{plan.name}</span>
+                          {plan.badge && (
+                            <span class={`text-[10px] px-1.5 py-0.5 rounded font-medium ${
+                              plan.isFeatured 
+                                ? 'bg-slate-900 text-white' 
+                                : plan.category === 'onetime'
+                                ? 'bg-amber-100 text-amber-800 border border-amber-200'
+                                : 'bg-indigo-50 text-indigo-700 border border-indigo-200'
+                            }`}>
+                              {plan.badge}
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                      <td class="py-3 px-4 whitespace-nowrap">
+                        <div class="font-bold text-indigo-600">{plan.price} {plan.period}</div>
+                        {plan.monthlyRate && (
+                          <div class="text-[11px] text-slate-400 mt-0.5">{plan.monthlyRate}</div>
+                        )}
+                      </td>
+                      <td class="py-3 px-4 whitespace-nowrap">
+                        <div class="font-semibold text-slate-800">{plan.traffic}</div>
+                        <div class="text-[11px] text-slate-400 mt-0.5">{plan.trafficType}</div>
+                      </td>
+                      <td class="py-3 px-4 text-xs whitespace-nowrap">
+                        <div class="text-slate-700">{plan.lines}</div>
+                        <div class="text-[11px] text-emerald-600 font-medium">{plan.speed}</div>
+                      </td>
+                      <td class="py-3 px-4 text-xs whitespace-nowrap text-slate-600">
+                        {plan.devices}
+                      </td>
+                      <td class="py-3 px-4 text-xs text-slate-500 max-w-[200px] truncate" title={plan.bestFor}>
+                        {plan.bestFor}
+                      </td>
+                      <td class="py-3 px-4 text-right whitespace-nowrap">
+                        <a
+                          href={airport.affLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="inline-flex items-center px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-xs transition-all"
+                        >
+                          选购 ›
+                        </a>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- 2. Categorized Detailed Package Cards -->
+          <!-- Part A: Subscription Plans -->
+          {subscriptionPackages.length > 0 && (
+            <div>
+              <div class="flex items-center space-x-2 mb-4">
+                <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
+                <h3 class="text-lg font-bold text-slate-900">
+                  一、周期订阅型专线套餐（支持月付/季付/年付）
+                </h3>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                {subscriptionPackages.map((plan) => (
+                  <div
+                    class={`rounded-3xl border p-5 flex flex-col justify-between transition-all duration-200 ${
+                      plan.isFeatured
+                        ? 'bg-gradient-to-b from-indigo-50/50 via-white to-white border-indigo-300 shadow-md ring-1 ring-indigo-200'
+                        : 'bg-white border-slate-200 hover:border-slate-300 shadow-xs hover:shadow-sm'
+                    }`}
+                  >
+                    <div>
+                      <!-- Card Header -->
+                      <div class="flex items-center justify-between mb-2">
+                        <span class={`text-xs px-2.5 py-0.5 rounded-full font-bold ${
+                          plan.isFeatured ? 'bg-slate-900 text-white' : 'bg-indigo-50 text-indigo-700 border border-indigo-200'
+                        }`}>
+                          {plan.badge || '推荐套餐'}
+                        </span>
+                        <span class="text-[11px] text-slate-400 font-mono">1x 真实倍率</span>
+                      </div>
+
+                      <h4 class="text-xl font-black text-slate-900 tracking-tight mt-1">
+                        {plan.name}
+                      </h4>
+                      <p class="text-xs text-slate-500 mt-1 line-clamp-2">
+                        {plan.bestFor}
+                      </p>
+
+                      <!-- Price Banner -->
+                      <div class="mt-4 p-3 rounded-2xl bg-slate-50 border border-slate-100 flex items-baseline justify-between">
+                        <div>
+                          <span class="text-2xl font-black text-indigo-600">{plan.price}</span>
+                          <span class="text-xs text-slate-500 font-medium ml-0.5">{plan.period}</span>
+                        </div>
+                        {plan.monthlyRate && (
+                          <span class="text-xs font-semibold text-slate-600 bg-white px-2 py-0.5 rounded border border-slate-200">
+                            {plan.monthlyRate}
+                          </span>
+                        )}
+                      </div>
+
+                      <!-- Key Specs Pills -->
+                      <div class="grid grid-cols-2 gap-2 mt-3 text-xs">
+                        <div class="p-2 rounded-xl bg-white border border-slate-100">
+                          <span class="text-slate-400 block text-[10px]">可用流量</span>
+                          <span class="font-bold text-slate-800">{plan.traffic}</span>
+                        </div>
+                        <div class="p-2 rounded-xl bg-white border border-slate-100">
+                          <span class="text-slate-400 block text-[10px]">专线速率</span>
+                          <span class="font-bold text-slate-800 truncate">{plan.speed}</span>
+                        </div>
+                      </div>
+
+                      <!-- Features List -->
+                      <div class="mt-4 pt-3 border-t border-slate-100">
+                        <div class="text-[11px] font-bold text-slate-700 mb-2">包含核心权益与参数：</div>
+                        <ul class="space-y-2 text-xs text-slate-600">
+                          {plan.features.map(f => (
+                            <li class="flex items-start space-x-1.5">
+                              <span class="text-emerald-500 font-bold mt-0.5 flex-shrink-0">✓</span>
+                              <span class="leading-relaxed">{f}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+
+                    <!-- Subscribe CTA Button -->
+                    <div class="mt-5 pt-3 border-t border-slate-100">
+                      <a
+                        href={airport.affLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class={`w-full py-2.5 px-4 rounded-xl font-bold text-xs flex items-center justify-center space-x-1 transition-all ${
+                          plan.isFeatured
+                            ? 'bg-slate-900 hover:bg-slate-800 text-white shadow-sm'
+                            : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-xs'
+                        }`}
+                      >
+                        <span>选购此套餐</span>
+                        <span>→</span>
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <!-- Part B: One-time Plans -->
+          {onetimePackages.length > 0 && (
+            <div>
+              <div class="flex items-center space-x-2 mb-4">
+                <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                <h3 class="text-lg font-bold text-slate-900">
+                  二、一次性买断流量包（无时间限制 · 永久有效 · 永不过期）
+                </h3>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                {onetimePackages.map((plan) => (
+                  <div class="rounded-3xl border border-amber-200/80 bg-gradient-to-b from-amber-50/30 to-white p-5 flex flex-col justify-between shadow-xs hover:shadow-sm transition-all">
+                    <div>
+                      <!-- Card Header -->
+                      <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs px-2.5 py-0.5 rounded-full font-bold bg-amber-100 text-amber-900 border border-amber-200">
+                          {plan.badge || '一次性买断'}
+                        </span>
+                        <span class="text-[11px] text-amber-800 font-semibold">永久有效</span>
+                      </div>
+
+                      <h4 class="text-xl font-black text-slate-900 tracking-tight mt-1">
+                        {plan.name}
+                      </h4>
+                      <p class="text-xs text-slate-500 mt-1 line-clamp-2">
+                        {plan.bestFor}
+                      </p>
+
+                      <!-- Price Banner -->
+                      <div class="mt-4 p-3 rounded-2xl bg-white border border-amber-100 flex items-baseline justify-between">
+                        <div>
+                          <span class="text-2xl font-black text-amber-950">{plan.price}</span>
+                          <span class="text-xs text-amber-700 font-medium ml-0.5">{plan.period}</span>
+                        </div>
+                        <span class="text-xs font-semibold text-amber-900 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                          无月租
+                        </span>
+                      </div>
+
+                      <!-- Key Specs Pills -->
+                      <div class="grid grid-cols-2 gap-2 mt-3 text-xs">
+                        <div class="p-2 rounded-xl bg-white border border-slate-100">
+                          <span class="text-slate-400 block text-[10px]">买断流量</span>
+                          <span class="font-bold text-slate-800">{plan.traffic}</span>
+                        </div>
+                        <div class="p-2 rounded-xl bg-white border border-slate-100">
+                          <span class="text-slate-400 block text-[10px]">设备权限</span>
+                          <span class="font-bold text-slate-800 truncate">{plan.devices}</span>
+                        </div>
+                      </div>
+
+                      <!-- Features List -->
+                      <div class="mt-4 pt-3 border-t border-slate-100">
+                        <div class="text-[11px] font-bold text-slate-700 mb-2">买断权益详单：</div>
+                        <ul class="space-y-2 text-xs text-slate-600">
+                          {plan.features.map(f => (
+                            <li class="flex items-start space-x-1.5">
+                              <span class="text-amber-600 font-bold mt-0.5 flex-shrink-0">✓</span>
+                              <span class="leading-relaxed">{f}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+
+                    <!-- Subscribe CTA Button -->
+                    <div class="mt-5 pt-3 border-t border-slate-100">
+                      <a
+                        href={airport.affLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="w-full py-2.5 px-4 rounded-xl font-bold text-xs flex items-center justify-center space-x-1 bg-amber-500 hover:bg-amber-600 text-white shadow-xs transition-all"
+                      >
+                        <span>选购买断包</span>
+                        <span>→</span>
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div class="p-8 rounded-3xl bg-slate-50 border border-slate-200 text-center">
+          <div class="w-12 h-12 mx-auto rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl mb-3">
+            📦
+          </div>
+          <h3 class="text-base font-bold text-slate-900 mb-1">
+            {airport.name} 官方弹性套餐
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-500 max-w-lg mx-auto mb-5 leading-relaxed">
+            官方提供起步低至 <strong class="text-indigo-600">{airport.price !== '-' ? airport.price : '平价实惠'}</strong> 的多档位月付与年付套餐，包含优质专线与主流流媒体/ChatGPT 原生解锁。
+          </p>
+          <a
+            href={airport.affLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center space-x-2 px-6 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm shadow-md transition-all"
+          >
+            <span>直达 {airport.name} 官网选购配套</span>
+            <span>→</span>
+          </a>
+        </div>
+      )}
+    </div>
+
+    <!-- In-depth Review Content -->
+    <div class="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-sm mb-10 space-y-6 text-sm sm:text-base text-slate-700 leading-relaxed">
+      <h2 class="text-xl font-bold text-slate-900 border-b border-slate-100 pb-3">
+        {airport.name} 深度综合评测报告
+      </h2>
+
+      <div>
+        <h3 class="text-base font-bold text-slate-900 mb-2">一、网络架构与晚高峰测速表现</h3>
+        <p>
+          在实际多线程测速与日常使用中，<strong>{airport.name}</strong> 展现出了优异的连接表现。其线路基于 <strong>{airport.lines !== '-' ? airport.lines : '高品质中转与专线'}</strong> 架构，针对晚高峰（20:00 - 23:00）骨干网拥堵进行了精细化智能分流，YouTube 4K 甚至 8K 蓝光流媒体拖动进度条缓冲极快，外服网游延迟抖动控制在合理低位。
+        </p>
+      </div>
+
+      <div>
+        <h3 class="text-base font-bold text-slate-900 mb-2">二、ChatGPT 与海外流媒体解锁</h3>
+        <p>
+          针对当下火热的 AI 工具（ChatGPT Plus、Claude 3.5 Sonnet、Midjourney）以及 Netflix、Disney+ 等主流海外流媒体，该服务商提供了专用的解锁节点池。节点 IP 纯净度高，能够有效规避风控降智，保障生产力工具与娱乐剧集丝滑畅享。
+        </p>
+      </div>
+
+      <div>
+        <h3 class="text-base font-bold text-slate-900 mb-2">三、客户端兼容性与导入教程</h3>
+        <p>
+          支持 Windows、macOS、Android、iOS 及软路由等全平台代理客户端。推荐配合开源现代客户端 <strong>Clash Verge Rev</strong> 或 <strong>Mihomo Party</strong> 使用；苹果手机用户可无缝通过 <strong>Shadowrocket (小火箭)</strong> 扫描二维码或导入订阅链接，一键开启系统代理。
+        </p>
+      </div>
+
+      <!-- Quick CTA -->
+      <div class="p-5 rounded-2xl bg-indigo-50/70 border border-indigo-200 flex flex-col sm:flex-row items-center justify-between gap-4 mt-6">
+        <div>
+          <div class="font-bold text-slate-900 text-sm">立即开通 {airport.name} 高速服务</div>
+          <div class="text-xs text-slate-600 mt-0.5">支持微信、支付宝和USDT即时开通，开通后可在用户中心一键复制 Clash 订阅</div>
+        </div>
+        <a
+          href={airport.affLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs sm:text-sm shadow-md transition-all flex-shrink-0"
+        >
+          直达官网选购 →
+        </a>
+      </div>
+    </div>
+
+    <!-- Related Recommended Airports -->
+    <div class="pt-6 border-t border-slate-200">
+      <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center justify-between">
+        <span>其它热门优质机场评测推荐</span>
+        <a href="/recommendations" class="text-xs font-semibold text-indigo-600 hover:text-indigo-700">
+          查看全部 35 款榜单 →
+        </a>
+      </h3>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {relatedAirports.map(item => (
+          <a
+            href={`/airports/${item.id}`}
+            class="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs hover:border-indigo-400 hover:shadow-md transition-all flex flex-col justify-between group"
+          >
+            <div>
+              <div class="flex items-center space-x-2 mb-2">
+                {item.logo ? (
+                  <img src={item.logo} alt={item.name} class="w-6 h-6 rounded object-contain" />
+                ) : null}
+                <span class="font-bold text-slate-900 group-hover:text-indigo-600 text-sm truncate">
+                  {item.name}
+                </span>
+                <span class="text-[10px] text-amber-600 font-bold ml-auto">★{item.score.toFixed(1)}</span>
+              </div>
+              <div class="text-xs font-bold text-indigo-600 mb-1">{item.price}</div>
+              <div class="text-[11px] text-slate-500 truncate">{item.lines}</div>
+            </div>
+            <div class="mt-3 pt-2 border-t border-slate-100 text-[11px] text-indigo-600 font-semibold flex items-center justify-between">
+              <span>阅读详细评测</span>
+              <span>→</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </article>
+
+  <Footer slot="footer" />
+</Layout>

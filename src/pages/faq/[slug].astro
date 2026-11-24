@@ -1,0 +1,347 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { FAQ_ITEMS, type FaqItem } from '../../data/faqs';
+import { AIRPORTS } from '../../data/airports';
+
+export async function getStaticPaths() {
+  return FAQ_ITEMS.map((faq, index) => {
+    const prevFaq = index > 0 ? FAQ_ITEMS[index - 1] : null;
+    const nextFaq = index < FAQ_ITEMS.length - 1 ? FAQ_ITEMS[index + 1] : null;
+    
+    // 找出同类或同标签的相关问题（最多4个）
+    const relatedFaqs = FAQ_ITEMS.filter(
+      item => item.id !== faq.id && (
+        item.categorySlug === faq.categorySlug ||
+        item.tags.some(t => faq.tags.includes(t))
+      )
+    ).slice(0, 4);
+
+    return {
+      params: { slug: faq.slug },
+      props: { faq, prevFaq, nextFaq, relatedFaqs }
+    };
+  });
+}
+
+interface Props {
+  faq: FaqItem;
+  prevFaq: FaqItem | null;
+  nextFaq: FaqItem | null;
+  relatedFaqs: FaqItem[];
+}
+
+const { faq, prevFaq, nextFaq, relatedFaqs } = Astro.props;
+
+// 精选推荐机场（选择3个顶级IPLC专线机场供用户直接参考）
+const topAirports = AIRPORTS.filter(a => a.featured && a.category === 'iplc').slice(0, 3);
+
+// JSON-LD 结构化数据
+const schemaData = {
+  "@context": "https://schema.org",
+  "@type": "QAPage",
+  "mainEntity": {
+    "@type": "Question",
+    "name": faq.question,
+    "text": faq.question,
+    "answerCount": 1,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": faq.shortAnswer,
+      "datePublished": "2026-01-01T08:00:00+08:00",
+      "author": {
+        "@type": "Organization",
+        "name": "机场clash"
+      }
+    }
+  }
+};
+---
+
+<Layout
+  title={`${faq.question} - 常见问题解答与实操教程 | 机场clash`}
+  description={faq.shortAnswer}
+  keywords={`${faq.tags.join(', ')}, 机场FAQ, Clash排错, 翻墙教程, 机场选购指南`}
+  canonicalURL={`https://jichang-clash.xyz/faq/${faq.slug}`}
+>
+  <Header slot="header" />
+
+  <main class="py-8 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+    <!-- 面包屑导航 -->
+    <nav class="flex items-center space-x-2 text-xs text-slate-500 mb-6 font-mono overflow-x-auto whitespace-nowrap py-1">
+      <a href="/" class="hover:text-indigo-600 transition-colors">首页</a>
+      <span>/</span>
+      <a href="/faq" class="hover:text-indigo-600 transition-colors">常见问题解答</a>
+      <span>/</span>
+      <span class="text-indigo-600 font-semibold truncate max-w-[260px] sm:max-w-md">{faq.question}</span>
+    </nav>
+
+    <!-- 文章标题区 -->
+    <header class="mb-8 pb-6 border-b border-slate-200">
+      <div class="flex flex-wrap items-center gap-2 mb-3">
+        <a
+          href="/faq"
+          class="inline-flex items-center space-x-1 text-xs font-semibold px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 font-mono hover:bg-indigo-100 transition-colors"
+        >
+          <span>{faq.category}</span>
+        </a>
+        <span class="text-xs text-slate-400 font-mono">•</span>
+        <span class="text-xs text-emerald-600 font-semibold font-mono bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+          {faq.updatedAt}
+        </span>
+        {faq.views && (
+          <span class="text-xs text-slate-400 font-mono ml-auto">
+            浏览 {faq.views} 次
+          </span>
+        )}
+      </div>
+
+      <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight leading-snug">
+        {faq.question}
+      </h1>
+
+      <!-- 标签列表 -->
+      <div class="flex flex-wrap items-center gap-1.5 mt-4">
+        {faq.tags.map(tag => (
+          <span class="text-xs text-slate-600 bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-lg transition-colors">
+            #{tag}
+          </span>
+        ))}
+      </div>
+    </header>
+
+    <!-- 核心结论速览卡片 -->
+    <div class="mb-10 p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-indigo-50/80 via-white to-sky-50/50 border border-indigo-200 shadow-xs">
+      <div class="flex items-start space-x-3">
+        <div class="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <div>
+          <h2 class="text-base font-bold text-slate-900 mb-1.5">核心结论速览 (TL;DR)</h2>
+          <p class="text-sm sm:text-base text-slate-700 leading-relaxed font-medium">
+            {faq.shortAnswer}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 详细拆解正文 -->
+    <article class="prose prose-slate max-w-none mb-12 space-y-8">
+      {faq.detail.overview && (
+        <div class="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-2xs">
+          <h2 class="text-lg font-bold text-slate-900 mb-3 flex items-center space-x-2">
+            <span class="w-2 h-4 bg-indigo-600 rounded-full inline-block"></span>
+            <span>核心背景与底层原理</span>
+          </h2>
+          <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
+            {faq.detail.overview}
+          </p>
+        </div>
+      )}
+
+      {faq.detail.sections.map((section, sIdx) => (
+        <section class="bg-white p-6 sm:p-7 rounded-2xl border border-slate-200/90 shadow-2xs">
+          <h2 class="text-lg sm:text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100 flex items-center space-x-2">
+            <span class="w-2 h-4 bg-sky-500 rounded-full inline-block"></span>
+            <span>{section.title}</span>
+          </h2>
+          
+          <div class="text-sm sm:text-base text-slate-600 leading-relaxed space-y-3" set:html={section.content}></div>
+
+          {section.listItems && section.listItems.length > 0 && (
+            <ul class="mt-4 space-y-2.5 bg-slate-50/80 p-4 sm:p-5 rounded-xl border border-slate-200/60 list-none pl-0">
+              {section.listItems.map((item) => (
+                <li class="flex items-start space-x-2.5 text-xs sm:text-sm text-slate-700">
+                  <span class="text-indigo-600 font-bold mt-0.5">•</span>
+                  <span set:html={item}></span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      ))}
+
+      <!-- 补充常见疑问解答 -->
+      {faq.detail.faqs && faq.detail.faqs.length > 0 && (
+        <section class="bg-white p-6 sm:p-7 rounded-2xl border border-slate-200/90 shadow-2xs">
+          <h2 class="text-lg sm:text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100 flex items-center space-x-2">
+            <span class="w-2 h-4 bg-amber-500 rounded-full inline-block"></span>
+            <span>关于该问题的延伸解答</span>
+          </h2>
+          <div class="space-y-4">
+            {faq.detail.faqs.map((subQ) => (
+              <div class="p-4 rounded-xl bg-amber-50/40 border border-amber-200/70">
+                <h3 class="text-sm font-bold text-slate-900 mb-1.5 flex items-center space-x-2">
+                  <span class="text-amber-600 font-mono text-xs font-extrabold">Q.</span>
+                  <span>{subQ.q}</span>
+                </h3>
+                <p class="text-xs sm:text-sm text-slate-600 pl-4 border-l-2 border-amber-400 leading-relaxed">
+                  {subQ.a}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <!-- 专家建议与避坑提示 -->
+      {faq.detail.summaryTips && (
+        <div class="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 text-slate-800">
+          <div class="flex items-start space-x-3">
+            <div class="w-7 h-7 rounded-lg bg-emerald-600 text-white flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <div>
+              <h3 class="text-sm font-bold text-emerald-950 mb-1">专家总结与避坑要点</h3>
+              <p class="text-xs sm:text-sm text-emerald-900 leading-relaxed">
+                {faq.detail.summaryTips}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+    </article>
+
+    <!-- 推荐优质专线机场（解决用户当下痛点） -->
+    <section class="mb-12 p-6 sm:p-8 rounded-3xl bg-slate-900 text-white shadow-xl relative overflow-hidden">
+      <div class="absolute -right-16 -top-16 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+      
+      <div class="relative z-10">
+        <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+          <div>
+            <span class="text-xs font-mono font-semibold px-2.5 py-0.5 rounded-md bg-indigo-500/30 text-indigo-300 border border-indigo-400/30">
+              TOP RECOMMENDED AIRPORTS
+            </span>
+            <h3 class="text-xl sm:text-2xl font-extrabold text-white mt-1.5">
+              仍受线路中断或解锁困扰？精选高品质 IPLC 专线
+            </h3>
+          </div>
+          <a
+            href="/recommendations"
+            class="text-xs font-semibold text-indigo-300 hover:text-white flex items-center space-x-1"
+          >
+            <span>查看完整推荐榜单</span>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+
+        <p class="text-xs sm:text-sm text-slate-300 mb-6 max-w-2xl leading-relaxed">
+          全线搭载物理专线网络，所有节点统一 1.0x 真实倍率，全天候 4K 流媒体秒开与原生 IP 解锁：
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {topAirports.map(airport => (
+            <div class="p-4 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10 backdrop-blur-sm transition-all flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <div class="flex items-center space-x-2">
+                    {airport.logo && (
+                      <img src={airport.logo} alt={airport.name} class="w-6 h-6 rounded-md object-contain bg-white/20 p-0.5" />
+                    )}
+                    <span class="font-bold text-white text-sm">{airport.name}</span>
+                  </div>
+                  <span class="text-xs font-mono text-amber-300 bg-amber-400/20 px-1.5 py-0.5 rounded border border-amber-400/30">
+                    ★ {airport.score}
+                  </span>
+                </div>
+                <p class="text-xs text-slate-300 line-clamp-2 mb-3">
+                  {airport.slogan}
+                </p>
+                <div class="text-xs font-mono text-indigo-300 font-semibold mb-3">
+                  {airport.price}
+                </div>
+              </div>
+              <div class="flex items-center space-x-2 pt-2 border-t border-white/10">
+                <a
+                  href={`/airports/${airport.id}`}
+                  class="flex-1 py-1.5 text-center rounded-lg bg-white/10 hover:bg-white/20 text-xs font-semibold text-white transition-colors"
+                >
+                  详细评测
+                </a>
+                <a
+                  href={airport.affLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="flex-1 py-1.5 text-center rounded-lg bg-indigo-600 hover:bg-indigo-500 text-xs font-semibold text-white shadow-xs transition-colors"
+                >
+                  直达官网
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 上一篇 / 下一篇导航 -->
+    <nav class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
+      {prevFaq ? (
+        <a
+          href={`/faq/${prevFaq.slug}`}
+          class="p-4 rounded-2xl bg-white hover:bg-indigo-50/30 border border-slate-200 hover:border-indigo-300 transition-all group flex flex-col justify-between"
+        >
+          <span class="text-xs font-mono text-slate-400 group-hover:text-indigo-600 transition-colors flex items-center space-x-1 mb-1">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            <span>上一篇问题</span>
+          </span>
+          <span class="text-sm font-bold text-slate-800 group-hover:text-indigo-600 transition-colors line-clamp-2">
+            {prevFaq.question}
+          </span>
+        </a>
+      ) : (
+        <div class="hidden sm:block"></div>
+      )}
+
+      {nextFaq && (
+        <a
+          href={`/faq/${nextFaq.slug}`}
+          class="p-4 rounded-2xl bg-white hover:bg-indigo-50/30 border border-slate-200 hover:border-indigo-300 transition-all group flex flex-col justify-between text-right"
+        >
+          <span class="text-xs font-mono text-slate-400 group-hover:text-indigo-600 transition-colors flex items-center justify-end space-x-1 mb-1">
+            <span>下一篇问题</span>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </span>
+          <span class="text-sm font-bold text-slate-800 group-hover:text-indigo-600 transition-colors line-clamp-2">
+            {nextFaq.question}
+          </span>
+        </a>
+      )}
+    </nav>
+
+    <!-- 相关常见问题推荐列表 -->
+    {relatedFaqs && relatedFaqs.length > 0 && (
+      <section class="mb-12 p-6 rounded-3xl bg-slate-50 border border-slate-200/80">
+        <h3 class="text-base font-bold text-slate-900 mb-4 flex items-center space-x-2">
+          <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span>您可能还想了解的相关问题</span>
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {relatedFaqs.map(item => (
+            <a
+              href={`/faq/${item.slug}`}
+              class="p-3.5 rounded-xl bg-white hover:bg-indigo-50/50 border border-slate-200/80 hover:border-indigo-300 text-xs sm:text-sm font-semibold text-slate-700 hover:text-indigo-600 transition-all flex items-center justify-between group shadow-2xs"
+            >
+              <span class="line-clamp-1">{item.question}</span>
+              <svg class="w-4 h-4 text-slate-400 group-hover:text-indigo-600 flex-shrink-0 ml-2 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- 返回知识库大厅按钮 -->
+    <div class="text-center pt-4">
+      <a
+        href="/faq"
+        class="inline-flex items-center space-x-2 px-6 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm shadow-md transition-all active:scale-95"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        <span>返回常见问题解答 (FAQ) 知识库主页</span>
+      </a>
+    </div>
+  </main>
+
+  <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
+  <Footer slot="footer" />
+</Layout>

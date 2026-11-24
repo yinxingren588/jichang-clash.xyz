@@ -1,0 +1,134 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { FAQ_CATEGORIES, FAQ_ITEMS } from '../../data/faqs';
+---
+
+<Layout
+  title="💡 科学上网与机场选购常见问题解答 (FAQ) (2026权威知识库) | 机场clash"
+  description={`详细解答关于IPLC专线原理、Clash订阅导入失败、节点超时、ChatGPT/Netflix流媒体解锁报错等全网 ${FAQ_ITEMS.length} 项核心疑难解答，均支持独立专页详细查阅。`}
+  keywords="科学上网FAQ, 机场选购常见问题, Clash排错, 节点超时解决, ChatGPT解锁, Netflix代理报错, IPLC专线疑问, 机场跑路避坑, 翻墙疑难解答"
+  canonicalURL="https://jichang-clash.xyz/faq"
+>
+  <Header slot="header" />
+
+  <div class="py-8 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+    <!-- 面包屑导航 -->
+    <div class="flex items-center space-x-2 text-xs text-slate-500 mb-6 font-mono">
+      <a href="/" class="hover:text-indigo-600 transition-colors">首页</a>
+      <span>/</span>
+      <span class="text-indigo-600 font-semibold">常见问题解答 (FAQ)</span>
+    </div>
+
+    <!-- 顶部 Banner -->
+    <div class="mb-10 pb-8 border-b border-slate-200">
+      <div class="inline-flex items-center space-x-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 mb-2 font-mono">
+        <span>KNOWLEDGE BASE & FAQ</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+        科学上网与机场选购常见问题解答
+      </h1>
+      <p class="text-sm sm:text-base text-slate-600 mt-2">
+        汇集新手在选择机场套餐、订阅导入、节点排错、流媒体/AI 解锁以及软路由游戏加速过程中最常遇到的 {FAQ_ITEMS.length} 大实用问题。每个问题均提供专属独立图文详解专页与保姆级实操指南。
+      </p>
+
+      <!-- 快捷分类锚点导航 -->
+      <div class="flex flex-wrap items-center gap-2 mt-6">
+        {FAQ_CATEGORIES.map(cat => (
+          <a
+            href={`#category-${cat.categorySlug}`}
+            class="inline-flex items-center space-x-1 text-xs font-semibold px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 border border-slate-200 transition-all"
+          >
+            <span>{cat.category}</span>
+            <span class="text-slate-400 font-mono text-[11px]">({cat.items.length})</span>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <!-- 分类 FAQ 列表展示 -->
+    <div class="space-y-12">
+      {FAQ_CATEGORIES.map(cat => (
+        <section id={`category-${cat.categorySlug}`} class="scroll-mt-20">
+          <div class="flex items-center justify-between mb-4 pb-2 border-b border-slate-200">
+            <h2 class="text-xl font-bold text-slate-900 flex items-center space-x-2">
+              <span class="w-2.5 h-5 bg-indigo-600 rounded-full inline-block"></span>
+              <span>{cat.category}</span>
+            </h2>
+            <span class="text-xs font-mono text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">
+              共 {cat.items.length} 篇独立解答
+            </span>
+          </div>
+
+          <div class="space-y-4">
+            {cat.items.map((item, idx) => (
+              <div class="rounded-2xl bg-white border border-slate-200/90 hover:border-indigo-300 p-5 sm:p-6 shadow-xs hover:shadow-md transition-all group">
+                <div class="flex items-start justify-between gap-3">
+                  <div class="flex-1">
+                    <div class="flex flex-wrap items-center gap-2 mb-2">
+                      <span class="text-indigo-600 font-mono text-xs font-extrabold bg-indigo-50 border border-indigo-200/60 px-2 py-0.5 rounded-md">
+                        Q{idx + 1}
+                      </span>
+                      {item.tags.slice(0, 2).map(tag => (
+                        <span class="text-[11px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    <h3 class="text-base sm:text-lg font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
+                      <a href={`/faq/${item.slug}`} class="focus:outline-none">
+                        {item.question}
+                      </a>
+                    </h3>
+
+                    <p class="mt-2.5 text-xs sm:text-sm text-slate-600 leading-relaxed line-clamp-2">
+                      {item.shortAnswer}
+                    </p>
+                  </div>
+                </div>
+
+                <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between flex-wrap gap-2">
+                  <span class="text-xs font-mono text-slate-400">
+                    更新时间：{item.updatedAt}
+                  </span>
+                  <a
+                    href={`/faq/${item.slug}`}
+                    class="inline-flex items-center space-x-1.5 text-xs font-bold text-indigo-600 group-hover:text-indigo-700 bg-indigo-50 group-hover:bg-indigo-100/80 px-3 py-1.5 rounded-xl transition-all"
+                  >
+                    <span>查看独立图文详解 &gt;</span>
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+
+    <!-- 底部选购引导卡片 -->
+    <div class="mt-16 p-8 rounded-3xl bg-gradient-to-r from-indigo-50 to-sky-50 border border-indigo-200 text-center">
+      <h3 class="text-xl font-bold text-slate-900 mb-2">仍有疑问？先挑选一款稳定机场试试吧</h3>
+      <p class="text-sm text-slate-600 mb-6 max-w-lg mx-auto">
+        实践是检验网络速度的最佳方式，挑选月付低成本体验，立享高速全球网络
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a
+          href="/recommendations"
+          class="w-full sm:w-auto px-6 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm shadow-md transition-all"
+        >
+          查看精选推荐机场榜单
+        </a>
+        <a
+          href="/tutorials"
+          class="w-full sm:w-auto px-6 py-3 rounded-2xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-bold text-sm shadow-sm transition-all"
+        >
+          查看客户端配置教程
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <Footer slot="footer" />
+</Layout>

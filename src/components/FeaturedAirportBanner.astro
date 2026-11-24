@@ -1,0 +1,150 @@
+---
+import type { Airport } from '../data/airports';
+
+interface Props {
+  airport: Airport;
+}
+
+const { airport } = Astro.props;
+---
+
+<div
+  data-airport-card
+  data-featured-banner="true"
+  data-name={airport.name.toLowerCase()}
+  data-slogan={airport.slogan.toLowerCase()}
+  data-category={airport.category || 'iplc'}
+  data-categories="all iplc cost-effective streaming monthly onetime dual-isp gaming"
+  class="relative w-full rounded-3xl p-6 sm:p-8 lg:p-9 bg-gradient-to-br from-indigo-50/90 via-white to-sky-50/80 border-2 border-indigo-500/40 shadow-xl shadow-indigo-500/10 mb-10 transition-all hover:border-indigo-500/60"
+>
+  <!-- Crown Floating Pill -->
+  <div class="absolute -top-3.5 left-6 sm:left-8 px-4 py-1 rounded-full bg-gradient-to-r from-indigo-600 to-indigo-700 text-white text-xs font-bold shadow-md flex items-center space-x-1.5 tracking-wide">
+    <span>👑</span>
+    <span>Clash 独家合作机场</span>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center pt-2">
+    <!-- Left: Brand Info & Slogan -->
+    <div class="lg:col-span-5">
+      <div class="flex items-center space-x-3 mb-3">
+        {airport.logo ? (
+          <img
+            src={airport.logo}
+            alt={airport.name}
+            class="w-12 h-12 rounded-2xl object-cover border-2 border-indigo-200 shadow-md flex-shrink-0"
+          />
+        ) : (
+          <span class="flex items-center justify-center w-8 h-8 rounded-xl bg-indigo-600 text-white font-mono font-black text-sm shadow-md">
+            #1
+          </span>
+        )}
+        <h3 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight flex items-center gap-2">
+          <a href={`/airports/${airport.id}`} class="hover:text-indigo-600 transition-colors">
+            {airport.name}
+          </a>
+          <span class="text-xs font-mono font-normal text-indigo-700 bg-indigo-100/80 border border-indigo-200 px-2 py-0.5 rounded-full">
+            {airport.lines}
+          </span>
+        </h3>
+        <div class="flex items-baseline space-x-1 bg-gradient-to-br from-amber-400 to-amber-500 text-slate-950 font-black px-2.5 py-1 rounded-xl shadow-sm ml-auto sm:ml-0">
+          <span class="text-xs">★</span>
+          <span class="text-base">{airport.score.toFixed(1)}</span>
+        </div>
+      </div>
+
+      <p class="text-sm sm:text-base text-slate-700 font-medium leading-relaxed mb-4">
+        {airport.slogan}
+      </p>
+
+      <!-- Key highlights -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm text-slate-700">
+        {airport.highlights.map(item => (
+          <div class="flex items-center space-x-2">
+            <svg class="w-4 h-4 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+            <span>{item}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Middle: Specifications & Unblocks -->
+    <div class="lg:col-span-4 bg-white/90 rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between">
+      <div class="grid grid-cols-3 gap-2 text-center pb-3 border-b border-slate-100">
+        <div>
+          <div class="text-[11px] text-slate-500 font-medium">起步资费</div>
+          <div class="text-base sm:text-lg font-black text-indigo-600 mt-0.5">{airport.price}</div>
+        </div>
+        <div>
+          <div class="text-[11px] text-slate-500 font-medium">可用流量</div>
+          <div class="text-xs sm:text-sm font-bold text-slate-800 mt-1">{airport.traffic}</div>
+        </div>
+        <div>
+          <div class="text-[11px] text-slate-500 font-medium">最高带宽</div>
+          <div class="text-xs sm:text-sm font-bold text-emerald-600 mt-1">{airport.speed}</div>
+        </div>
+      </div>
+
+      <div class="pt-3">
+        <div class="text-[11px] text-slate-500 mb-1.5 font-medium">解锁支持与传输协议</div>
+        <div class="flex flex-wrap gap-1.5">
+          {airport.streaming.map(service => (
+            <span class="text-[11px] px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200 font-mono">
+              {service}
+            </span>
+          ))}
+          {airport.protocols.map(p => (
+            <span class="text-[11px] px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200 font-mono">
+              {p}
+            </span>
+          ))}
+        </div>
+        <div class="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+          <span class="text-slate-500 text-[11px]">官方 9 大配套：</span>
+          <a href={`/airports/${airport.id}#packages`} class="text-indigo-600 hover:text-indigo-700 font-bold text-[11px] flex items-center space-x-0.5">
+            <span>年付¥109 · 白银 · 黄金 · 铂金 · 钻石 · 买断包</span>
+            <span>›</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Coupon & CTA Button -->
+    <div class="lg:col-span-3 flex flex-col justify-center space-y-3">
+      {airport.coupon && (
+        <div class="p-3 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-between text-xs">
+          <div class="flex flex-col">
+            <span class="text-[10px] text-amber-800 font-medium">{airport.couponDiscount || '专属折扣码'}</span>
+            <span class="font-mono font-black text-amber-950 text-sm tracking-wider">{airport.coupon}</span>
+          </div>
+          <button
+            onclick={`copyCoupon('${airport.coupon}', event)`}
+            class="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs transition-colors shadow-sm"
+          >
+            一键复制
+          </button>
+        </div>
+      )}
+
+      <a
+        href={airport.affLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white font-extrabold text-center text-sm sm:text-base shadow-lg shadow-indigo-600/25 active:scale-[0.98] transition-all flex items-center justify-center space-x-2 group"
+      >
+        <span>立即直达 {airport.name} 官网选购</span>
+        <svg class="w-5 h-5 group-hover:translate-x-1.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+      </a>
+
+      <div class="flex items-center justify-between text-xs px-1">
+        <a
+          href={`/airports/${airport.id}`}
+          class="text-indigo-600 hover:text-indigo-700 font-bold inline-flex items-center space-x-1"
+        >
+          <span>📋 查看 9 大官方套餐与评测</span>
+          <span>→</span>
+        </a>
+        <span class="text-slate-400 text-[11px]">敏感期稳定保障</span>
+      </div>
+    </div>
+  </div>
+</div>

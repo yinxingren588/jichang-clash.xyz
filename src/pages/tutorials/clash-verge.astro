@@ -1,0 +1,115 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<Layout
+  title="Clash Verge Rev 详细安装配置与使用教程 (2026最新版) - 机场clash"
+  description="详细讲解新一代主流开源客户端 Clash Verge Rev 的下载、安装、中文汉化、一键导入机场订阅及系统代理开启全流程教程。"
+  keywords="Clash Verge Rev教程, Clash Verge下载, Clash Verge配置, Clash Verge服务模式, TUN模式开启, Clash订阅导入教程, Windows翻墙软件"
+  canonicalURL="https://jichang-clash.xyz/tutorials/clash-verge"
+>
+  <Header slot="header" />
+
+  <article class="py-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+    <!-- Breadcrumb -->
+    <div class="flex items-center space-x-2 text-xs text-slate-500 mb-6 font-mono">
+      <a href="/" class="hover:text-indigo-600">首页</a>
+      <span>/</span>
+      <span>教程中心</span>
+      <span>/</span>
+      <span class="text-indigo-600 font-semibold">Clash Verge Rev 教程</span>
+    </div>
+
+    <!-- Article Header -->
+    <header class="mb-10 pb-8 border-b border-slate-200">
+      <div class="inline-block px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-xs font-semibold text-indigo-700 mb-3">
+        客户端核心教程
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
+        Clash Verge Rev 详细安装与订阅配置教程
+      </h1>
+      <div class="flex items-center space-x-4 text-xs text-slate-500">
+        <span>更新时间：2026年最新</span>
+        <span>·</span>
+        <span>支持系统：Windows 10/11, macOS, Linux</span>
+        <span>·</span>
+        <a href="https://jichang-clash.xyz" class="text-indigo-600 font-medium">机场clash (jichang-clash.xyz)</a>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <div class="space-y-8 text-slate-700 leading-relaxed text-sm sm:text-base">
+      <div class="p-4 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-950 text-sm">
+        💡 <strong>背景介绍：</strong> 原版 Clash for Windows (CFW) 早已停更，目前开源社区最推荐、最主流且界面最美观的替代品就是 <strong>Clash Verge Rev</strong>。它支持 Mihomo (Clash.Meta) 内核，完美支持新一代抗封锁协议，支持分流规则自定义。
+      </div>
+
+      <section>
+        <h2 class="text-2xl font-bold text-slate-900 mb-3 flex items-center space-x-2">
+          <span class="w-2 h-6 bg-indigo-600 rounded-full inline-block"></span>
+          <span>第一步：下载与安装客户端</span>
+        </h2>
+        <p>访问 Clash Verge Rev 官方 GitHub Releases 页面，根据您的电脑系统选择对应的安装包：</p>
+        <ul class="list-disc pl-6 space-y-2 text-sm text-slate-600 mt-2">
+          <li><strong>Windows 用户：</strong> 下载文件名包含 <code class="text-indigo-600 font-mono bg-slate-100 px-1 py-0.5 rounded">x64-setup.exe</code> 的安装程序，双击按提示一路下一步安装。</li>
+          <li><strong>Mac 用户：</strong> M 系列芯片下载 <code class="text-indigo-600 font-mono bg-slate-100 px-1 py-0.5 rounded">aarch64.dmg</code>，Intel 芯片下载 <code class="text-indigo-600 font-mono bg-slate-100 px-1 py-0.5 rounded">x64.dmg</code>。</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-bold text-slate-900 mb-3 flex items-center space-x-2">
+          <span class="w-2 h-6 bg-cyan-600 rounded-full inline-block"></span>
+          <span>第二步：获取机场订阅链接</span>
+        </h2>
+        <p>在 <a href="/#recommendations" class="text-indigo-600 underline font-semibold">机场clash 推荐列表</a> 中选购适合的机场套餐后，登录机场后台：</p>
+        <ol class="list-decimal pl-6 space-y-2 text-sm text-slate-600 mt-2">
+          <li>在机场仪表盘中找到「便捷导入」或「一键订阅」区域。</li>
+          <li>点击「复制 Clash 订阅链接」（通常是一串以 https:// 开头的 URL）。</li>
+        </ol>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-bold text-slate-900 mb-3 flex items-center space-x-2">
+          <span class="w-2 h-6 bg-purple-600 rounded-full inline-block"></span>
+          <span>第三步：将订阅导入 Clash Verge</span>
+        </h2>
+        <ol class="list-decimal pl-6 space-y-2 text-sm text-slate-600 mt-2">
+          <li>打开 Clash Verge Rev 软件，在左侧导航栏点击 <strong>「订阅 (Profiles)」</strong>。</li>
+          <li>在顶部的输入框中粘贴刚才复制的机场订阅链接，然后点击右侧的 <strong>「导入 (Import)」</strong> 按钮。</li>
+          <li>等待数秒，订阅列表中会显示该机场配置，鼠标单击它即可选中并激活该订阅。</li>
+        </ol>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-bold text-slate-900 mb-3 flex items-center space-x-2">
+          <span class="w-2 h-6 bg-emerald-600 rounded-full inline-block"></span>
+          <span>第四步：开启代理与选择节点</span>
+        </h2>
+        <ol class="list-decimal pl-6 space-y-2 text-sm text-slate-600 mt-2">
+          <li>点击左侧的 <strong>「代理 (Proxies)」</strong> 页面，代理模式推荐保持默认的 <strong>「规则 (Rule)」</strong>（国内直连、国外翻墙）。</li>
+          <li>在节点分组中展开列表，选择您想使用的节点（例如香港专线、日本专线、新加坡原生节点等）。</li>
+          <li>最后在左侧 <strong>「设置 (Settings)」</strong> 或右上角勾选开启 <strong>「系统代理 (System Proxy)」</strong>。</li>
+          <li>此时打开浏览器访问 Google 或 YouTube，若能秒开则表示配置成功！</li>
+        </ol>
+      </section>
+
+      <!-- Back CTA -->
+      <div class="mt-12 p-6 rounded-2xl bg-slate-50 border border-slate-200 text-center">
+        <h3 class="text-lg font-bold text-slate-900 mb-2">还没有好用的高速稳定机场？</h3>
+        <p class="text-sm text-slate-600 mb-4">
+          精选优质 IPLC 内网专线、晚高峰不卡顿、原生解锁 4K & ChatGPT
+        </p>
+        <a
+          href="/#recommendations"
+          class="inline-flex items-center space-x-2 px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 text-white font-bold text-sm shadow-md hover:shadow-indigo-500/30 transition-all"
+        >
+          <span>立即查看精选机场推荐与折扣码</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+      </div>
+    </div>
+  </article>
+
+  <Footer slot="footer" />
+</Layout>

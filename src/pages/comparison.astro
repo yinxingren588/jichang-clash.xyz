@@ -1,0 +1,223 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { AIRPORTS } from '../data/airports';
+---
+
+<Layout
+  title="📊 35款精选机场核心参数横向对比大表 (2026最新) | 机场clash"
+  description="全网最全35款优质Clash机场横向对比表，多维度对比套餐价格、专线/中继线路类型、协议支持、4K流媒体/ChatGPT解锁情况、测速表现及综合评分。"
+  keywords="机场对比, 机场横向评测, 机场价格对比, 专线中继对比, 机场测速大表, Clash机场对比, 机场推荐2026, 机场性价比排行"
+  canonicalURL="https://jichang-clash.xyz/comparison"
+>
+  <Header slot="header" />
+
+  <div class="py-8 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto">
+    <!-- Breadcrumb -->
+    <div class="flex items-center space-x-2 text-xs text-slate-500 mb-6 font-mono">
+      <a href="/" class="hover:text-indigo-600">首页</a>
+      <span>/</span>
+      <span class="text-indigo-600 font-semibold">机场横向对比</span>
+    </div>
+
+    <!-- Header Banner -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 pb-6 border-b border-slate-200">
+      <div>
+        <div class="inline-flex items-center space-x-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 mb-2 font-mono">
+          <span>COMPARISON MATRIX (共 {AIRPORTS.length} 家多维对比)</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          35 款精选机场核心参数横向对比大表
+        </h1>
+        <p class="text-sm sm:text-base text-slate-600 mt-2">
+          多维度数据一览无余，通过价格、专线类型、支持协议与解锁能力横评，帮助您 30 秒找到最适合自己的网络服务
+        </p>
+      </div>
+
+      <!-- Quick Action -->
+      <a
+        href="/recommendations"
+        class="inline-flex items-center space-x-1.5 px-4 py-2.5 rounded-xl bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 text-xs sm:text-sm font-semibold transition-all flex-shrink-0"
+      >
+        <span>查看卡片版推荐榜单</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+      </a>
+    </div>
+
+    <!-- Search / Filter in Table -->
+    <div class="mb-6 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="relative w-full sm:w-96">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        </div>
+        <input
+          type="text"
+          id="table-search"
+          placeholder="在对比表中搜索机场名、线路或协议..."
+          class="w-full pl-9 pr-4 py-2 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-slate-800 placeholder-slate-400 bg-slate-50 transition-all"
+        />
+      </div>
+
+      <div class="text-xs text-slate-500">
+        💡 提示：点击每行右侧的「直达官网」按钮可直达该机场注册页面
+      </div>
+    </div>
+
+    <!-- Full Comparison Table -->
+    <div class="overflow-x-auto rounded-3xl border border-slate-200 bg-white shadow-sm mb-14">
+      <table id="matrix-table" class="w-full text-left text-sm text-slate-600">
+        <thead class="bg-slate-50 text-xs uppercase text-slate-500 border-b border-slate-200 font-mono">
+          <tr>
+            <th scope="col" class="py-4 px-5">序号</th>
+            <th scope="col" class="py-4 px-5">机场名称</th>
+            <th scope="col" class="py-4 px-5">起步价格</th>
+            <th scope="col" class="py-4 px-5">节点线路类型</th>
+            <th scope="col" class="py-4 px-5">最高测速</th>
+            <th scope="col" class="py-4 px-5">支持协议</th>
+            <th scope="col" class="py-4 px-5">ChatGPT / 流媒体</th>
+            <th scope="col" class="py-4 px-5 text-center">综合评分</th>
+            <th scope="col" class="py-4 px-5 text-right">官网直达</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-200">
+          {AIRPORTS.map((item, idx) => (
+            <tr class="table-row hover:bg-slate-50/80 transition-colors" data-name={item.name.toLowerCase()} data-lines={item.lines.toLowerCase()}>
+              <td class="py-4 px-5 font-mono text-xs text-slate-400 whitespace-nowrap">
+                #{idx + 1}
+              </td>
+              <td class="py-4 px-5 font-bold text-slate-900 whitespace-nowrap">
+                <div class="flex items-center space-x-2">
+                  {item.logo ? (
+                    <img src={item.logo} alt={item.name} class="w-6 h-6 rounded object-contain bg-slate-50 border border-slate-200/80 inline-block flex-shrink-0" />
+                  ) : null}
+                  <a href={`/airports/${item.id}`} class="hover:text-indigo-600 transition-colors">
+                    {item.name}
+                  </a>
+                  {item.featured && (
+                    <span class="text-[10px] bg-indigo-50 text-indigo-700 border border-indigo-200 px-1.5 py-0.5 rounded font-medium">主力推荐</span>
+                  )}
+                </div>
+                <div class="text-xs font-normal text-slate-500 mt-0.5">{item.suitableFor || '-'}</div>
+              </td>
+              <td class="py-4 px-5 whitespace-nowrap">
+                <span class={item.price !== '-' ? 'font-bold text-indigo-600' : 'text-slate-400'}>
+                  {item.price}
+                </span>
+              </td>
+              <td class="py-4 px-5 whitespace-nowrap">
+                <span class={`inline-flex items-center text-xs px-2 py-0.5 rounded ${item.lines !== '-' ? 'bg-slate-100 border border-slate-200 text-slate-800' : 'text-slate-400'}`}>
+                  {item.lines}
+                </span>
+              </td>
+              <td class="py-4 px-5 font-semibold text-emerald-600 whitespace-nowrap">
+                {item.speed}
+              </td>
+              <td class="py-4 px-5 whitespace-nowrap">
+                <div class="flex flex-wrap gap-1">
+                  {item.protocols.map(p => (
+                    <span class="text-[11px] bg-slate-100 border border-slate-200/80 px-1.5 py-0.5 rounded text-slate-700 font-mono">{p}</span>
+                  ))}
+                </div>
+              </td>
+              <td class="py-4 px-5 whitespace-nowrap">
+                <span class="inline-flex items-center text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded font-medium">
+                  ✓ 原生支持 4K/AI
+                </span>
+              </td>
+              <td class="py-4 px-5 text-center whitespace-nowrap">
+                <span class="font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 font-mono">
+                  ★ {item.score.toFixed(1)}
+                </span>
+              </td>
+              <td class="py-4 px-5 text-right whitespace-nowrap">
+                <div class="flex items-center justify-end space-x-2">
+                  <a
+                    href={`/airports/${item.id}`}
+                    class="text-xs text-indigo-600 hover:text-indigo-700 font-semibold px-2 py-1 rounded hover:bg-indigo-50 transition-colors"
+                  >
+                    详情
+                  </a>
+                  <a
+                    href={item.affLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center space-x-1 px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition-colors shadow-sm"
+                  >
+                    <span>直达官网</span>
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Terminology & Comparison Guide -->
+    <div class="p-6 sm:p-8 rounded-3xl bg-slate-50 border border-slate-200">
+      <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center space-x-2">
+        <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+        <span>核心参数深度解析与选购技巧</span>
+      </h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-slate-600">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200">
+          <h4 class="font-bold text-slate-900 mb-2 text-base">一、什么是 IPLC / IEPL 专线？</h4>
+          <p class="leading-relaxed">
+            IPLC（International Private Leased Circuit）是跨境国际专线，境内入口与境外机房之间是内网私有光纤连接，<strong>不经过 GFW 防火墙</strong>。其核心优势在于即便在敏感时期也几乎不失联，晚高峰延迟低且无抖动。代表性推荐如 <strong>隐形人</strong>。
+          </p>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200">
+          <h4 class="font-bold text-slate-900 mb-2 text-base">二、什么是 BGP 隧道中转？</h4>
+          <p class="leading-relaxed">
+            BGP 隧道采用国内多线机房作为入口，通过加密隧道将数据转发至香港、日本、美国等落地机房。性价比极高，带宽储备巨大，适合看剧刷短视频等大流量需求。代表性推荐如 <strong>暮光加速</strong>、<strong>飞猫云</strong>。
+          </p>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200">
+          <h4 class="font-bold text-slate-900 mb-2 text-base">三、流媒体与 ChatGPT 原生解锁机制</h4>
+          <p class="leading-relaxed">
+            Netflix、Disney+ 与 OpenAI 对数据中心商用 IP 封控严格。优质机场会采用<strong>原生住宅 IP 池</strong>或特定 DNS 双向分流技术，将访问流媒体和 AI 的流量自动伪装为海外普通家庭用户，从而杜绝“拒绝访问”或“降智”问题。
+          </p>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200">
+          <h4 class="font-bold text-slate-900 mb-2 text-base">四、支持协议：Shadowsocks vs VLESS-Reality</h4>
+          <p class="leading-relaxed">
+            Shadowsocks 是最经典的通用协议，兼容性无敌；而基于 Mihomo (Clash.Meta) 的 VLESS-Reality 和 Hysteria 2 则采用了最新伪装技术，单线程并发更强，在弱网或恶劣网络环境下抗丢包能力更胜一筹。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <Footer slot="footer" />
+
+  <!-- Instant Search Script for Table -->
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchInput = document.getElementById('table-search');
+      const rows = document.querySelectorAll('.table-row');
+
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          const query = e.target.value.trim().toLowerCase();
+          rows.forEach(row => {
+            const name = row.getAttribute('data-name') || '';
+            const lines = row.getAttribute('data-lines') || '';
+            const text = row.innerText.toLowerCase();
+
+            if (!query || name.includes(query) || lines.includes(query) || text.includes(query)) {
+              row.style.display = '';
+            } else {
+              row.style.display = 'none';
+            }
+          });
+        });
+      }
+    });
+  </script>
+</Layout>

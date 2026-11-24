@@ -1,0 +1,94 @@
+---
+import { AIRPORTS } from '../data/airports';
+---
+
+<section id="comparison" class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+  <div class="text-center mb-10">
+    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+      精选机场核心参数横向对比
+    </h2>
+    <p class="text-sm sm:text-base text-slate-600 mt-2 max-w-xl mx-auto">
+      多维度数据一览无余，帮助您快速找到最适合自己网络环境的科学上网机场
+    </p>
+  </div>
+
+  <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <table class="w-full text-left text-sm text-slate-600">
+      <thead class="bg-slate-50 text-xs uppercase text-slate-500 border-b border-slate-200 font-mono">
+        <tr>
+          <th scope="col" class="py-4 px-5">机场名称</th>
+          <th scope="col" class="py-4 px-5">套餐价格</th>
+          <th scope="col" class="py-4 px-5">节点线路类型</th>
+          <th scope="col" class="py-4 px-5">支持协议</th>
+          <th scope="col" class="py-4 px-5">ChatGPT / 流媒体</th>
+          <th scope="col" class="py-4 px-5 text-center">综合评分</th>
+          <th scope="col" class="py-4 px-5 text-right">官网直达</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-200">
+        {AIRPORTS.map((item) => (
+          <tr class="hover:bg-slate-50/80 transition-colors">
+            <td class="py-4 px-5 font-bold text-slate-900 whitespace-nowrap">
+              <div class="flex items-center space-x-2">
+                {item.logo ? (
+                  <img src={item.logo} alt={item.name} class="w-6 h-6 rounded object-contain bg-slate-50 border border-slate-200/80 inline-block flex-shrink-0" />
+                ) : null}
+                <a href={`/airports/${item.id}`} class="hover:text-indigo-600 transition-colors">
+                  {item.name}
+                </a>
+                {item.featured && (
+                  <span class="text-[10px] bg-indigo-50 text-indigo-700 border border-indigo-200 px-1.5 py-0.5 rounded font-medium">主力</span>
+                )}
+              </div>
+              <div class="text-xs font-normal text-slate-500 mt-0.5">{item.suitableFor || '-'}</div>
+            </td>
+            <td class="py-4 px-5 whitespace-nowrap">
+              <span class={item.price !== '-' ? 'font-bold text-indigo-600' : 'text-slate-400'}>
+                {item.price}
+              </span>
+            </td>
+            <td class="py-4 px-5 whitespace-nowrap">
+              <span class={item.lines !== '-' ? 'text-slate-700' : 'text-slate-400'}>
+                {item.lines}
+              </span>
+            </td>
+            <td class="py-4 px-5 whitespace-nowrap">
+              <div class="flex flex-wrap gap-1">
+                {item.protocols.map(p => (
+                  <span class="text-[11px] bg-slate-100 border border-slate-200/80 px-1.5 py-0.5 rounded text-slate-700 font-mono">{p}</span>
+                ))}
+              </div>
+            </td>
+            <td class="py-4 px-5 whitespace-nowrap">
+              <span class="inline-flex items-center text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded font-medium">
+                ✓ 原生支持 4K/AI
+              </span>
+            </td>
+            <td class="py-4 px-5 text-center whitespace-nowrap">
+              <span class="font-bold text-amber-600">{item.score.toFixed(1)}</span>
+            </td>
+            <td class="py-4 px-5 text-right whitespace-nowrap">
+              <div class="flex items-center justify-end space-x-2">
+                <a
+                  href={`/airports/${item.id}`}
+                  class="text-xs text-indigo-600 hover:text-indigo-700 font-semibold px-2 py-1 rounded hover:bg-indigo-50 transition-colors"
+                >
+                  详情
+                </a>
+                <a
+                  href={item.affLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium transition-colors shadow-sm"
+                >
+                  <span>直达官网</span>
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                </a>
+              </div>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</section>

@@ -1,0 +1,55 @@
+---
+// Header.astro
+const pathname = Astro.url.pathname;
+
+const navItems = [
+  { name: '🏠 首页', href: '/', active: pathname === '/' },
+  { name: '🔥 热门机场推荐', href: '/recommendations', active: pathname.startsWith('/recommendations') },
+  { name: '📊 机场横向对比', href: '/comparison', active: pathname.startsWith('/comparison') },
+  { name: '📖 Clash 教程', href: '/tutorials', active: pathname.startsWith('/tutorials') },
+  { name: '💡 常见问题', href: '/faq', active: pathname.startsWith('/faq') },
+];
+---
+
+<header class="sticky top-0 z-40 w-full backdrop-blur-md bg-white/90 border-b border-slate-200/80 transition-all shadow-sm">
+  <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <!-- Brand / Logo -->
+    <a href="/" class="flex items-center space-x-3 group">
+      <img
+        src="/logo.png"
+        alt="机场clash Logo"
+        class="w-10 h-10 object-contain drop-shadow-sm group-hover:scale-105 transition-transform"
+      />
+      <span class="text-xl font-extrabold tracking-tight text-slate-900 group-hover:text-indigo-600 transition-colors">
+        机场clash
+      </span>
+    </a>
+
+    <!-- Navigation Links -->
+    <nav class="hidden md:flex items-center space-x-1 lg:space-x-2 text-sm font-medium">
+      {navItems.map(item => (
+        <a
+          href={item.href}
+          class={`px-3 py-2 rounded-xl transition-all ${
+            item.active
+              ? 'bg-indigo-50 text-indigo-700 font-bold border border-indigo-200/80 shadow-xs'
+              : 'text-slate-600 hover:text-indigo-600 hover:bg-slate-100'
+          }`}
+        >
+          {item.name}
+        </a>
+      ))}
+    </nav>
+
+    <!-- Right Action -->
+    <div class="flex items-center space-x-3">
+      <a
+        href="/recommendations"
+        class="inline-flex items-center space-x-1.5 px-4 py-2 text-xs sm:text-sm font-semibold rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white shadow-md hover:shadow-indigo-500/25 active:scale-95 transition-all"
+      >
+        <span>选购推荐</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+      </a>
+    </div>
+  </div>
+</header>

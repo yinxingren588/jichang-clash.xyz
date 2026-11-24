@@ -1,0 +1,27 @@
+{
+  "name": "jichang-clash",
+  "version": "1.0.0",
+  "description": "机场clash - 2026 高速稳定机场推荐与 Clash 全平台配置教程 (https://jichang-clash.xyz)",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev --port 8888 --host",
+    "start": "astro dev --port 8888 --host",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "keywords": [
+    "机场推荐",
+    "clash机场",
+    "clash配置教程",
+    "高速翻墙机场",
+    "专线机场",
+    "jichang-clash.xyz"
+  ],
+  "author": "机场clash",
+  "license": "MIT",
+  "dependencies": {
+    "@astrojs/tailwind": "^6.0.2",
+    "astro": "^7.4.13",
+    "tailwindcss": "^3.4.19"
+  }
+}
